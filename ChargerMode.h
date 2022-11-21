@@ -2,17 +2,40 @@
 #include <graph.h>
 #include <string.h>
 #include <time.h>
+#include <stdio.h>
 
 
-void AfficherGrille(int* tab,int nbcolonne, int nbligne) {
-    int colonne;
+void AfficherGrille(int** tab, int nbligne, int nbcolonne) {
     int ligne;
+    int colonne;
     int image;
     int taille=15;
     int i;
     int sprite;
     char str[50];
+    for (ligne=0;ligne<nbligne;ligne++) {
+        for (colonne=0;colonne<nbcolonne;colonne++) {
+            sprintf(str,"./images/%i.png", tab[ligne][colonne]);
+            sprite=ChargerSprite(str);
+            AfficherSprite(sprite,64*colonne,64*ligne);
+            taille--;
+        }
+    }
+    Touche();
+}
+
+
+int** CreerGrille(int* tab, int nbligne, int nbcolonne) {
     srand(time(NULL));
+    int** grille = calloc(nbligne, sizeof(int*));
+    for (int c = 0; c < nbcolonne; c++) {
+      grille[c] = calloc(nbcolonne, sizeof(int));
+    }
+    int i;
+    int image;
+    int ligne;
+    int colonne;
+    int taille =15;
     for (ligne=0;ligne<nbligne;ligne++) {
         for (colonne=0;colonne<nbcolonne;colonne++) {
             if (taille>=1) {
@@ -21,18 +44,16 @@ void AfficherGrille(int* tab,int nbcolonne, int nbligne) {
             else {
                 image=0;
             }
-            printf("%i\n",taille);
-            sprintf(str,"./images/%i.png", tab[image]);
+            grille[ligne][colonne]=tab[image];
             for (i=image;i<taille;i++) {
                 tab[i]=tab[i+1];
             }
-            sprite=ChargerSprite(str);
-            AfficherSprite(sprite,64*colonne,64*ligne);
             taille--;
-            Touche();
         }
     }
+    return grille;
 }
+
 
 void ChargerModeFacile() {
     ChargerImageFond("./images/casinotable.png");
@@ -46,7 +67,7 @@ void ChargerModeFacile() {
         tab[i+1]=cpt;
         cpt+=1;
     }
-    AfficherGrille(tab,4,4);
+    AfficherGrille(CreerGrille(tab,4,4),4,4); /**/
 }
 
 void ChargerMode(int mode) {
