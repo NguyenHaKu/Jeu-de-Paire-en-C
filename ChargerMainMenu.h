@@ -2,26 +2,17 @@
 #include <graph.h>
 
 void ChargerMainMenu() {
-    couleur c;
-    int apple;
     int mainMenu=1;
-    c=CouleurParNom("white");
-    ChoisirCouleurDessin(c);
-    ChargerImageFond("./images/casinotable.png");
-    EcrireTexte(587,60,"Match Pairs",2);
-    DessinerRectangle(460,135,400,110);
-    EcrireTexte(588,200,"Easy : 4x4",2);
-    DessinerRectangle(460,315,400,110);
-    EcrireTexte(583,380,"Medium : 5x4",2);
-    DessinerRectangle(460,505,400,110);
-    EcrireTexte(588,570,"Hard : 6x6",2);
-    ChoisirCouleurDessin(CouleurParNom("red"));
-    RemplirRectangle(1260,17,25,25);
-    ChoisirCouleurDessin(CouleurParNom("white"));
-    DessinerRectangle(1260,17,25,25);
-    DessinerSegment(1260,17,1260+25,17+25);
-    DessinerSegment(1260,17+25,1260+25,17);
-    ChoisirEcran(1);
-    EffacerEcran(CouleurParNom("orange"));
-    ChoisirEcran(0);
+    int panneau;
+    panneau=ChargerSprite("./images/scroll2.png");
+    ChargerImageFond("./images/japanbg4.jpg");
+    ChargerImage("./images/scroll.png",242,15,-0,-0,817,300);
+    ChargerImage("./images/matchpairs.png",350,77,-0,-0,598,54);
+    AfficherSprite(panneau,445,230);
+    ChargerImage("./images/easy.png",520,273,-0,-0,318,54);
+    AfficherSprite(panneau,445,400);
+    ChargerImage("./images/medium.png",503,446,-0,-0,334,54);
+    AfficherSprite(panneau,445,570);
+    ChargerImage("./images/hard.png",522,615,-0,-0,318,54);
+    ChargerImage("./images/boutonquitter.png",1250,15,-0,-0,30,30);
 }
