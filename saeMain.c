@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "ChargerMainMenu.h"
-#include "ChargerMode.h"
+#include "Jeu.h"
 
 int main() {
     int mainMenu=1;

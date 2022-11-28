@@ -2,7 +2,7 @@
 #include <graph.h>
 
 void ChargerMainMenu() {
-    int mainMenu=1;
+    /*Afficher la fenêtre menu*/
     int panneau;
     panneau=ChargerSprite("./images/scroll2.png");
     ChargerImageFond("./images/japanbg4.jpg");

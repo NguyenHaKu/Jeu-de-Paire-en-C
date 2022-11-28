@@ -4,8 +4,10 @@
 #include <time.h>
 #include <stdio.h>
 
-
 int** CreerGrille(int* tab, int nbligne, int nbcolonne) {
+    /*Fonction qui permet de mélanger les cartes de façon aléatoire et les stocker dans un tableau 2D
+    Prend en argument un tableau, le nombre de ligne et colonne (nbligne*nbcolonne=longeur du tableau)
+    Renvoie un tableau 2D*/
     srand(time(NULL));
     int** grille = calloc(nbligne, sizeof(int*));
     for (int c = 0; c < nbcolonne; c++) {
@@ -35,9 +37,12 @@ int** CreerGrille(int* tab, int nbligne, int nbcolonne) {
 }
 
 void CacherGrille(int** grille, int difficulte) {
+    /*Fonction qui dessine une grille de cartes de dos*/
     int ligne;
     int colonne;
     int sprite;
+    sprite=ChargerSprite("./images/wood3.png");
+    AfficherSprite(sprite,380,110);
     sprite=ChargerSprite("./images/wood2.png");
     if (difficulte==1) {
         for (ligne=0;ligne<4;ligne++) {
@@ -56,14 +61,16 @@ void CacherGrille(int** grille, int difficulte) {
 }
 
 void AfficherGrille(int** grille, int difficulte) {
+    /*Fonction qui dévoile tous les cartes, utile en mode tricheur*/
     int ligne;
     int colonne;
     int image;
     int sprite;
     char str[50];
-    sprite=ChargerSprite("./images/wood3.png");
     AfficherSprite(sprite,380,110);
     if (difficulte==1) {
+        sprite=ChargerSprite("./images/wood3.png");
+        AfficherSprite(sprite,380,110);
         for (ligne=0;ligne<4;ligne++) {
             for (colonne=0;colonne<4;colonne++) {
                 sprintf(str,"./images/%i.png", grille[ligne][colonne]);
@@ -73,6 +80,8 @@ void AfficherGrille(int** grille, int difficulte) {
         }
     }
     else if (difficulte==2) {
+        sprite=ChargerSprite("./images/wood4.png");
+        AfficherSprite(sprite,265,10);
         for (ligne=0;ligne<6;ligne++) {
             for (colonne=0;colonne<6;colonne++) {
                 sprintf(str,"./images/%i.png", grille[ligne][colonne]);
@@ -81,11 +90,10 @@ void AfficherGrille(int** grille, int difficulte) {
             }
         }
     }
-    CacherGrille(grille, 2);
-    Touche();
 }
 
-void ChargerFacile() {
+int** ChargerFacile() {
+    /*Afficher la fenêtre de jeu facile*/
     ChargerImageFond("./images/japanbg.png");
     int i;
     int f;
@@ -99,11 +107,13 @@ void ChargerFacile() {
         cpt+=1;
     }
     grille=CreerGrille(tab,4,4);
-    AfficherGrille(grille, 1); /**/
+    CacherGrille(grille, 1);
+    return grille;
 }
 
-void ChargerMoyen() {
-    ChargerImageFond("./images/japanbg.png");
+int** ChargerMoyen() {
+    /*Afficher la fenêtre de jeu moyen*/
+    ChargerImageFond("./images/japanbg3.png");
     int i;
     int f;
     int cpt=1;
@@ -116,14 +126,6 @@ void ChargerMoyen() {
         cpt+=1;
     }
     grille=CreerGrille(tab,6,6);
-    AfficherGrille(grille, 2); /**/
-}
-
-void ChargerDifficulte(int difficulte) {
-    if (difficulte==1) {
-        ChargerFacile();
-    }
-    else if (difficulte=2) {
-        ChargerMoyen();
-    }
+    CacherGrille(grille, 2);
+    return grille;
 }
