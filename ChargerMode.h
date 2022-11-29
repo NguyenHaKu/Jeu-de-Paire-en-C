@@ -41,10 +41,10 @@ void CacherGrille(int** grille, int difficulte) {
     int ligne;
     int colonne;
     int sprite;
-    sprite=ChargerSprite("./images/wood3.png");
-    AfficherSprite(sprite,380,110);
-    sprite=ChargerSprite("./images/wood2.png");
     if (difficulte==1) {
+        sprite=ChargerSprite("./images/wood3.png");
+        AfficherSprite(sprite,380,110);
+        sprite=ChargerSprite("./images/wood2.png");
         for (ligne=0;ligne<4;ligne++) {
             for (colonne=0;colonne<4;colonne++) {
                 AfficherSprite(sprite,422+(124*colonne),152+(124*ligne));
@@ -52,6 +52,9 @@ void CacherGrille(int** grille, int difficulte) {
         }
     }
     else if (difficulte==2) {
+        sprite=ChargerSprite("./images/wood4.png");
+        AfficherSprite(sprite,265,10);
+        sprite=ChargerSprite("./images/wood2.png");
         for (ligne=0;ligne<6;ligne++) {
             for (colonne=0;colonne<6;colonne++) {
                 AfficherSprite(sprite,308+(114*colonne),38+(114*ligne));
