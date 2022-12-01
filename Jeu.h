@@ -21,23 +21,36 @@ int compteur(int seconde) {
 
 int tricher(int** grille, int difficulte) {
     int touche;
-    int tempsdetriche;
+    int tempsdetriche=0;
+    int triche;
+    char temps[4];
+    unsigned long timer=Microsecondes()+delta;
     if (ToucheEnAttente()) {
         touche= Touche();
         if (touche== 84 || 114) {
-            while (1) {
-                tempsdetriche=compteur(tempsdetriche);
-                CacherGrille(difficulte);
-                AfficherGrille(grille, difficulte);
-                touche=Touche();
-                if (touche== 84 || 114){
-                    CacherGrille(difficulte);
-                    printf("%i", tempsdetriche);
-                    return tempsdetriche;
+            CacherGrille(difficulte);
+            AfficherGrille(grille, difficulte);
+            while (triche) {
+                if (Microsecondes()>=timer){
+                    timer=Microsecondes()+delta;
+                    tempsdetriche++;
+                }
+                if (ToucheEnAttente()) {
+                    touche= Touche();
+                    if (touche== 84 || 114){
+                        CacherGrille(difficulte);
+                        triche=0;
+                        return tempsdetriche;
+                    }
                 }
             }
+            return tempsdetriche;
+        }
+        else {
+            return tempsdetriche;
         }
     }
+    return tempsdetriche;
 }
 
 int GrilleComplete(int** grille, int l, int c) {
@@ -138,9 +151,10 @@ void * PremiereCarte(int** grille, int difficulte){
     if (difficulte==1) {
         while (jeutourne) {
             tempsdetriche=tricher(grille, difficulte);
+            tempsdepart+=tempsdetriche;
             if (time(NULL)>=timer){
                 timer=time(NULL)+1;
-                seconde=time(NULL)-tempsdepart-tempsdetriche;
+                seconde=time(NULL)-tempsdepart;
                 sprintf(temps,"%i",seconde);
                 ChoisirCouleurDessin(CouleurParNom("white"));
                 RemplirRectangle(1225,30,40,40);
