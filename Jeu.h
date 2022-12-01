@@ -9,6 +9,37 @@
 
 int jeutourne=1;
 
+int compteur(int seconde) {
+    char temps[4];
+    unsigned long timer=Microsecondes()+delta;
+    if (Microsecondes()>=timer){
+        timer=Microsecondes()+delta;
+        seconde++;
+    }
+    return seconde;
+}
+
+int tricher(int** grille, int difficulte) {
+    int touche;
+    int tempsdetriche;
+    if (ToucheEnAttente()) {
+        touche= Touche();
+        if (touche== 84 || 114) {
+            while (1) {
+                tempsdetriche=compteur(tempsdetriche);
+                CacherGrille(difficulte);
+                AfficherGrille(grille, difficulte);
+                touche=Touche();
+                if (touche== 84 || 114){
+                    CacherGrille(difficulte);
+                    printf("%i", tempsdetriche);
+                    return tempsdetriche;
+                }
+            }
+        }
+    }
+}
+
 int GrilleComplete(int** grille, int l, int c) {
     int i, f;
     for (i=0; i<l; i++) {
@@ -30,34 +61,27 @@ int ComparerCartes(int carte1, int carte2) {
     }
 }
 
-void *timer() {
-    char temps[4];
-    int seconde=0;
-    unsigned long timer=Microsecondes()+delta;
-    while(jeutourne) {
-        if (Microsecondes()>=timer){
-            timer=Microsecondes()+delta;
-            seconde++;
-            sprintf(temps,"%i",seconde);
-            ChoisirCouleurDessin(CouleurParNom("white"));
-            RemplirRectangle(1225,30,40,40);
-            ChoisirCouleurDessin(CouleurParNom("black"));
-            EcrireTexte(1230,70,temps, 2);
-        }
-    }
-}
-
-
-int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int difficulte) {
+int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int difficulte, int tempsdepart) {
     int ligne, colonne;
-    int carte1=nomCarte;
-    int carte2;
-    int asec=1;
+    int carte1=nomCarte, carte2;
+    int asec=1, seconde=0, tempsdetriche;
     int deuxiemecarte=0;
     unsigned long suivant;
+    unsigned long timer=time(NULL)+1;
     char str[50], temps[4];
     if (difficulte==1) {
         while (!deuxiemecarte) {
+            tempsdetriche=tricher(grille, difficulte);
+            if (time(NULL)>=timer){
+                timer=time(NULL)+1;
+                seconde=time(NULL)-tempsdepart-tempsdetriche;
+                sprintf(temps,"%i",seconde);
+                ChoisirCouleurDessin(CouleurParNom("white"));
+                RemplirRectangle(1225,30,40,40);
+                ChoisirCouleurDessin(CouleurParNom("black"));
+                EcrireTexte(1230,70,temps, 2);
+            }
+
             if (SourisCliquee()) {
                 SourisPosition();
                 for (ligne=0; ligne<4; ligne++) {
@@ -74,6 +98,16 @@ int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int dif
                             suivant=Microsecondes()+delta;
                             if (!ComparerCartes(carte1,carte2)){
                                 while(asec){
+                                    tempsdetriche=tricher(grille, difficulte);
+                                    if (time(NULL)>=timer){
+                                        timer=time(NULL)+1;
+                                        seconde=time(NULL)-tempsdepart-tempsdetriche;
+                                        sprintf(temps,"%i",seconde);
+                                        ChoisirCouleurDessin(CouleurParNom("white"));
+                                        RemplirRectangle(1225,30,40,40);
+                                        ChoisirCouleurDessin(CouleurParNom("black"));
+                                        EcrireTexte(1230,70,temps, 2);
+                                    }
                                     if (Microsecondes()>=suivant) {
                                         carte=ChargerSprite("./images/wood2.png");
                                         AfficherSprite(carte,422+(124*f),152+(124*i));
@@ -97,10 +131,22 @@ int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int dif
 }
 
 void * PremiereCarte(int** grille, int difficulte){
-    int i, f, carte;
-    char str[50];
+    int i, f, carte, tempsdetriche=0, seconde=0;
+    unsigned long tempsdepart=time(NULL);
+    unsigned long timer=time(NULL)+1;
+    char str[50], temps[4];
     if (difficulte==1) {
         while (jeutourne) {
+            tempsdetriche=tricher(grille, difficulte);
+            if (time(NULL)>=timer){
+                timer=time(NULL)+1;
+                seconde=time(NULL)-tempsdepart-tempsdetriche;
+                sprintf(temps,"%i",seconde);
+                ChoisirCouleurDessin(CouleurParNom("white"));
+                RemplirRectangle(1225,30,40,40);
+                ChoisirCouleurDessin(CouleurParNom("black"));
+                EcrireTexte(1230,70,temps, 2);
+            }
             if (SourisCliquee()) {
                 SourisPosition();
                 for (i=0; i<4; i++) {
@@ -112,7 +158,7 @@ void * PremiereCarte(int** grille, int difficulte){
                             sprintf(str,"./images/%i.png",grille[i][f]);
                             carte=ChargerSprite(str);
                             AfficherSprite(carte,432+(124*f),162+(124*i));
-                            grille=DeuxiemeCarte(grille, carte, grille[i][f], f, i, difficulte);
+                            grille=DeuxiemeCarte(grille, carte, grille[i][f], f, i, difficulte, tempsdepart);
                             f=3;
                             i=3;
                         }

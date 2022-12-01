@@ -36,7 +36,7 @@ int** CreerGrille(int* tab, int nbligne, int nbcolonne) {
     return grille;
 }
 
-void CacherGrille(int** grille, int difficulte) {
+void CacherGrille(int difficulte) {
     /*Fonction qui dessine une grille de cartes de dos*/
     int ligne;
     int colonne;
@@ -72,8 +72,6 @@ void AfficherGrille(int** grille, int difficulte) {
     char str[50];
     AfficherSprite(sprite,380,110);
     if (difficulte==1) {
-        sprite=ChargerSprite("./images/wood3.png");
-        AfficherSprite(sprite,380,110);
         for (ligne=0;ligne<4;ligne++) {
             for (colonne=0;colonne<4;colonne++) {
                 sprintf(str,"./images/%i.png", grille[ligne][colonne]);
@@ -83,8 +81,6 @@ void AfficherGrille(int** grille, int difficulte) {
         }
     }
     else if (difficulte==2) {
-        sprite=ChargerSprite("./images/wood4.png");
-        AfficherSprite(sprite,265,10);
         for (ligne=0;ligne<6;ligne++) {
             for (colonne=0;colonne<6;colonne++) {
                 sprintf(str,"./images/%i.png", grille[ligne][colonne]);
@@ -110,7 +106,7 @@ int** ChargerFacile() {
         cpt+=1;
     }
     grille=CreerGrille(tab,4,4);
-    CacherGrille(grille, 1);
+    CacherGrille(1);
     return grille;
 }
 
@@ -129,6 +125,6 @@ int** ChargerMoyen() {
         cpt+=1;
     }
     grille=CreerGrille(tab,6,6);
-    CacherGrille(grille, 2);
+    CacherGrille(2);
     return grille;
 }
