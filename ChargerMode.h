@@ -36,28 +36,28 @@ int** CreerGrille(int* tab, int nbligne, int nbcolonne) {
     return grille;
 }
 
-void CacherGrille(int difficulte) {
+void CacherGrille(int** grille, int difficulte) {
     /*Fonction qui dessine une grille de cartes de dos*/
     int ligne;
     int colonne;
     int sprite;
     if (difficulte==1) {
-        sprite=ChargerSprite("./images/wood3.png");
-        AfficherSprite(sprite,380,110);
         sprite=ChargerSprite("./images/wood2.png");
         for (ligne=0;ligne<4;ligne++) {
             for (colonne=0;colonne<4;colonne++) {
-                AfficherSprite(sprite,422+(124*colonne),152+(124*ligne));
+                if (grille[ligne][colonne]!=0) {
+                    AfficherSprite(sprite,422+(124*colonne),152+(124*ligne));
+                }
             }
         }
     }
     else if (difficulte==2) {
-        sprite=ChargerSprite("./images/wood4.png");
-        AfficherSprite(sprite,265,10);
         sprite=ChargerSprite("./images/wood2.png");
         for (ligne=0;ligne<6;ligne++) {
             for (colonne=0;colonne<6;colonne++) {
-                AfficherSprite(sprite,308+(114*colonne),38+(114*ligne));
+                if (grille[ligne][colonne]!=0) {
+                    AfficherSprite(sprite,308+(114*colonne),38+(114*ligne));
+                }
             }
         }
     }
@@ -74,18 +74,24 @@ void AfficherGrille(int** grille, int difficulte) {
     if (difficulte==1) {
         for (ligne=0;ligne<4;ligne++) {
             for (colonne=0;colonne<4;colonne++) {
-                sprintf(str,"./images/%i.png", grille[ligne][colonne]);
-                sprite=ChargerSprite(str);
-                AfficherSprite(sprite,432+(124*colonne),162+(124*ligne));
+                if (grille[ligne][colonne]!=0){
+                    sprintf(str,"./images/%i.png", grille[ligne][colonne]);
+                    sprite=ChargerSprite(str);
+                    AfficherSprite(sprite,432+(124*colonne),162+(124*ligne));
+                    LibererSprite(sprite);
+                }
             }
         }
     }
     else if (difficulte==2) {
         for (ligne=0;ligne<6;ligne++) {
             for (colonne=0;colonne<6;colonne++) {
-                sprintf(str,"./images/%i.png", grille[ligne][colonne]);
-                sprite=ChargerSprite(str);
-                AfficherSprite(sprite,308+(114*colonne),38+(114*ligne));
+                if (grille[ligne][colonne]!=0) {
+                    sprintf(str,"./images/%i.png", grille[ligne][colonne]);
+                    sprite=ChargerSprite(str);
+                    AfficherSprite(sprite,308+(114*colonne),38+(114*ligne));
+                    LibererSprite(sprite);
+                }
             }
         }
     }
@@ -93,7 +99,11 @@ void AfficherGrille(int** grille, int difficulte) {
 
 int** ChargerFacile() {
     /*Afficher la fenêtre de jeu facile*/
+    int sprite;
     ChargerImageFond("./images/japanbg.png");
+    sprite=ChargerSprite("./images/wood3.png");
+    AfficherSprite(sprite,380,110);
+    LibererSprite(sprite);
     int i;
     int f;
     int cpt=1;
@@ -106,13 +116,17 @@ int** ChargerFacile() {
         cpt+=1;
     }
     grille=CreerGrille(tab,4,4);
-    CacherGrille(1);
+    CacherGrille(grille, 1);
     return grille;
 }
 
 int** ChargerMoyen() {
     /*Afficher la fenêtre de jeu moyen*/
+    int sprite;
     ChargerImageFond("./images/japanbg3.png");
+    sprite=ChargerSprite("./images/wood4.png");
+    AfficherSprite(sprite,265,10);
+    LibererSprite(sprite);
     int i;
     int f;
     int cpt=1;
@@ -125,6 +139,6 @@ int** ChargerMoyen() {
         cpt+=1;
     }
     grille=CreerGrille(tab,6,6);
-    CacherGrille(2);
+    CacherGrille(grille, 2);
     return grille;
 }

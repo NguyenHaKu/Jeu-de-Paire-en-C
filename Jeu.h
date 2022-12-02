@@ -9,6 +9,18 @@
 
 int jeutourne=1;
 
+int ToucheT() {
+    int touche;
+    if (ToucheEnAttente()) {
+        touche= Touche();
+        if (touche== 84 || 114){
+            return 1;
+        }
+    }
+    else {
+        return 0;
+    }
+}
 int compteur(int seconde) {
     char temps[4];
     unsigned long timer=Microsecondes()+delta;
@@ -25,33 +37,24 @@ int tricher(int** grille, int difficulte) {
     int triche;
     char temps[4];
     unsigned long timer=Microsecondes()+delta;
-    if (ToucheEnAttente()) {
-        touche= Touche();
-        if (touche== 84 || 114) {
-            CacherGrille(difficulte);
-            AfficherGrille(grille, difficulte);
-            while (triche) {
-                if (Microsecondes()>=timer){
-                    timer=Microsecondes()+delta;
-                    tempsdetriche++;
-                }
-                if (ToucheEnAttente()) {
-                    touche= Touche();
-                    if (touche== 84 || 114){
-                        CacherGrille(difficulte);
-                        triche=0;
-                        return tempsdetriche;
-                    }
-                }
-            }
-            return tempsdetriche;
+    AfficherGrille(grille, difficulte);
+    while (triche) {
+        if (Microsecondes()>=timer){
+            timer=Microsecondes()+delta;
+            tempsdetriche++;
         }
-        else {
-            return tempsdetriche;
+        if (ToucheEnAttente()) {
+            touche= Touche();
+            if (touche== 84 || 114){
+                CacherGrille(grille, difficulte);
+                triche=0;
+                return tempsdetriche;
+            }
         }
     }
     return tempsdetriche;
 }
+
 
 int GrilleComplete(int** grille, int l, int c) {
     int i, f;
@@ -84,17 +87,19 @@ int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int dif
     char str[50], temps[4];
     if (difficulte==1) {
         while (!deuxiemecarte) {
-            tempsdetriche=tricher(grille, difficulte);
+            if (ToucheT()) {
+                tempsdetriche=tricher(grille, difficulte);
+                tempsdepart+=tempsdetriche;
+            }
             if (time(NULL)>=timer){
                 timer=time(NULL)+1;
-                seconde=time(NULL)-tempsdepart-tempsdetriche;
+                seconde=time(NULL)-tempsdepart;
                 sprintf(temps,"%i",seconde);
                 ChoisirCouleurDessin(CouleurParNom("white"));
                 RemplirRectangle(1225,30,40,40);
                 ChoisirCouleurDessin(CouleurParNom("black"));
                 EcrireTexte(1230,70,temps, 2);
             }
-
             if (SourisCliquee()) {
                 SourisPosition();
                 for (ligne=0; ligne<4; ligne++) {
@@ -108,25 +113,18 @@ int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int dif
                             sprintf(str,"./images/%i.png",grille[ligne][colonne]);
                             carte=ChargerSprite(str);
                             AfficherSprite(carte,432+(124*colonne),162+(124*ligne));
-                            suivant=Microsecondes()+delta;
+                            LibererSprite(carte);
                             if (!ComparerCartes(carte1,carte2)){
+                                suivant=Microsecondes()+delta;
                                 while(asec){
-                                    tempsdetriche=tricher(grille, difficulte);
-                                    if (time(NULL)>=timer){
-                                        timer=time(NULL)+1;
-                                        seconde=time(NULL)-tempsdepart-tempsdetriche;
-                                        sprintf(temps,"%i",seconde);
-                                        ChoisirCouleurDessin(CouleurParNom("white"));
-                                        RemplirRectangle(1225,30,40,40);
-                                        ChoisirCouleurDessin(CouleurParNom("black"));
-                                        EcrireTexte(1230,70,temps, 2);
-                                    }
-                                    if (Microsecondes()>=suivant) {
+                                    if (Microsecondes()>=suivant){
                                         carte=ChargerSprite("./images/wood2.png");
                                         AfficherSprite(carte,422+(124*f),152+(124*i));
                                         AfficherSprite(carte,422+(124*colonne),152+(124*ligne));
+                                        LibererSprite(carte);
                                         asec=0;
                                     }
+                                    
                                 }
                             }
                             else {
@@ -150,8 +148,10 @@ void * PremiereCarte(int** grille, int difficulte){
     char str[50], temps[4];
     if (difficulte==1) {
         while (jeutourne) {
-            tempsdetriche=tricher(grille, difficulte);
-            tempsdepart+=tempsdetriche;
+            if (ToucheT()) {
+                tempsdetriche=tricher(grille, difficulte);
+                tempsdepart+=tempsdetriche;
+            }
             if (time(NULL)>=timer){
                 timer=time(NULL)+1;
                 seconde=time(NULL)-tempsdepart;
@@ -172,6 +172,7 @@ void * PremiereCarte(int** grille, int difficulte){
                             sprintf(str,"./images/%i.png",grille[i][f]);
                             carte=ChargerSprite(str);
                             AfficherSprite(carte,432+(124*f),162+(124*i));
+                            LibererSprite(carte);
                             grille=DeuxiemeCarte(grille, carte, grille[i][f], f, i, difficulte, tempsdepart);
                             f=3;
                             i=3;
@@ -193,9 +194,11 @@ void jeu(int** grille, int difficulte) {
 void ChargerDifficulte(int difficulte) {
     /*Charge la difficulté choisi au menu principal*/
     if (difficulte==1) {
-        jeu(ChargerFacile(), 1);
+        int** grille=ChargerFacile();
+        jeu(grille, 1);
     }
     else if (difficulte=2) {
-        jeu(ChargerMoyen(), 2);
+        int** grille=ChargerMoyen();
+        jeu(grille, 2);
     }
 }
