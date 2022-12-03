@@ -79,7 +79,7 @@ int ComparerCartes(int carte1, int carte2) {
 
 int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int difficulte, int tempsdepart) {
     int ligne, colonne;
-    int carte1=nomCarte, carte2;
+    int carte1=nomCarte, carte2,scroll;
     int asec=1, seconde=0, tempsdetriche;
     int deuxiemecarte=0;
     unsigned long suivant;
@@ -95,10 +95,11 @@ int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int dif
                 timer=time(NULL)+1;
                 seconde=time(NULL)-tempsdepart;
                 sprintf(temps,"%i",seconde);
-                ChoisirCouleurDessin(CouleurParNom("white"));
-                RemplirRectangle(1225,30,40,40);
+                scroll=ChargerSprite("./images/scroll3.png");
+                AfficherSprite(scroll,1200,15);
+                LibererSprite(scroll);
                 ChoisirCouleurDessin(CouleurParNom("black"));
-                EcrireTexte(1230,70,temps, 2);
+                EcrireTexte(1230,50,temps, 2);
             }
             if (SourisCliquee()) {
                 SourisPosition();
@@ -142,7 +143,7 @@ int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int dif
 }
 
 void * PremiereCarte(int** grille, int difficulte){
-    int i, f, carte, tempsdetriche=0, seconde=0;
+    int i, f, carte, tempsdetriche=0, seconde=0, scroll;
     unsigned long tempsdepart=time(NULL);
     unsigned long timer=time(NULL)+1;
     char str[50], temps[4];
@@ -156,10 +157,11 @@ void * PremiereCarte(int** grille, int difficulte){
                 timer=time(NULL)+1;
                 seconde=time(NULL)-tempsdepart;
                 sprintf(temps,"%i",seconde);
-                ChoisirCouleurDessin(CouleurParNom("white"));
-                RemplirRectangle(1225,30,40,40);
-                ChoisirCouleurDessin(CouleurParNom("black"));
-                EcrireTexte(1230,70,temps, 2);
+                scroll=ChargerSprite("./images/scroll3.png");
+                AfficherSprite(scroll,1200,15);
+                LibererSprite(scroll);
+                ChoisirCouleurDessin(CouleurParComposante(224,36,28));
+                EcrireTexte(1230,50,temps, 2);
             }
             if (SourisCliquee()) {
                 SourisPosition();
@@ -181,10 +183,20 @@ void * PremiereCarte(int** grille, int difficulte){
                 }
             }
             if (GrilleComplete(grille, 4, 4)) {
-                puts("Félicitation!");
                 jeutourne=0;
             }
+            
         }
+        ChargerImageFond("./images/japanbg.png");
+        scroll=ChargerSprite("./images/scroll4.png");
+        AfficherSprite(scroll,242,30);
+        scroll=ChargerSprite("./images/congrat.png");
+        AfficherSprite(scroll,380,260);
+        sprintf(str,"You've finished in %i seconds",seconde);
+        ChoisirCouleurDessin(CouleurParComposante(224,36,28));
+        EcrireTexte(480,345,str,2);
+        LibererSprite(scroll);
+        Touche();
     }
 }
 void jeu(int** grille, int difficulte) {
