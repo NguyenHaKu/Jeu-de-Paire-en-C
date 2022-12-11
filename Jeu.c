@@ -9,10 +9,11 @@
 
 int jeutourne=1;
 int ToucheT() {
+    /*fonction qui vérifie si la touche T est appuyé*/
     int touche;
     if (ToucheEnAttente()) {
         touche= Touche();
-        if (touche== 84 || 114){
+        if (touche== 84 || 114) { /*84 correspond au t minuscule et 114 au T majuscule*/
             return 1;
         }
     }
@@ -31,6 +32,7 @@ int compteur(int seconde) {
 }
 
 int tricher(int** grille, int difficulte, int i, int f) {
+    /*fonction tricher*/
     int touche, sprite;
     int tempsdetriche=0;
     int triche;
@@ -57,6 +59,7 @@ int tricher(int** grille, int difficulte, int i, int f) {
 
 
 int GrilleComplete(int** grille, int l, int c) {
+    /*vérifie si la grille est complète*/
     int i, f;
     for (i=0; i<l; i++) {
         for (f=0; f<c; f++) {
@@ -85,7 +88,7 @@ int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int dif
     unsigned long suivant;
     unsigned long timer=time(NULL)+1;
     char str[50], temps[4];
-    if (difficulte==1) {
+    if (difficulte==1) { /*difficulté facile*/
         while (!deuxiemecarte) {
             if (ToucheT()) {
                 tempsdetriche=tricher(grille, difficulte, i, f);
@@ -139,7 +142,7 @@ int** DeuxiemeCarte(int ** grille, int carte,int nomCarte, int f, int i, int dif
             }
         }
     } /*fin difficulté facile*/
-    else if (difficulte==2) {
+    else if (difficulte==2) { /*difficulté moyenne*/
         while (!deuxiemecarte) {
             if (ToucheT()) {
                 tempsdetriche=tricher(grille, difficulte, i, f);
@@ -201,7 +204,7 @@ void * PremiereCarte(int** grille, int difficulte){
     unsigned long tempsdepart=time(NULL);
     unsigned long timer=time(NULL)+1;
     char str[50], temps[4];
-    if (difficulte==1) {
+    if (difficulte==1) { /*difficulté facile*/
         while (jeutourne) {
             if (ToucheT()) {
                 tempsdetriche=tricher(grille, difficulte, -1, -1);
@@ -242,7 +245,7 @@ void * PremiereCarte(int** grille, int difficulte){
             
         }
     }
-    else if (difficulte==2) {
+    else if (difficulte==2) { /*difficulté moyenne*/
         while (jeutourne) {
             if (ToucheT()) {
                 tempsdetriche=tricher(grille, difficulte, -1, -1);
