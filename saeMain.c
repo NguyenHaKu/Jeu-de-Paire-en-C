@@ -2,8 +2,8 @@
 #include <graph.h>
 #include <stdio.h>
 #include <string.h>
-#include "ChargerMainMenu.h"
 #include "Jeu.h"
+#include "ChargerMode.h"
 
 int main() {
     int mainMenu=1;
