@@ -1,17 +1,17 @@
-paires : main.o mode.o jeu.o
-	gcc -Wall -ansi -o paires.out main.o mode.o jeu.o -lgraph -lm
+paires.out : saeMain.o ChargerMode.o Jeu.o
+	gcc -Wall -ansi -o paires.out saeMain.o ChargerMode.o Jeu.o -lgraph -lm
 
-main.o : saeMain.c
+saeMain.o : saeMain.c
 	gcc -c saeMain.c
 
-mode.o : ChargerMode.c ChargerMode.h
+ChargerMode.o : ChargerMode.c ChargerMode.h
 	gcc -c ChargerMode.c
 
-jeu.o : Jeu.c Jeu.h
+Jeu.o : Jeu.c Jeu.h
 	gcc -c Jeu.c
 
 clean :
 	rm -f *.o
 
-run :
+run : paires.out
 	./paires.out
